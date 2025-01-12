@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "dev": "remix dev",
     "build": "remix vite:build",
     "start": "remix-serve build/server/index.js",
     "typecheck": "tsc"
