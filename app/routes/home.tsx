@@ -1,4 +1,5 @@
 import { useLoaderData } from '@remix-run/react';
+import { useEffect } from 'react';
 import { getSomeValue } from '~/services/sample';
 
 export async function loader() {
@@ -7,6 +8,10 @@ export async function loader() {
 
 export default function HomePage() {
   const data = useLoaderData<typeof loader>();
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   return (
     <div>

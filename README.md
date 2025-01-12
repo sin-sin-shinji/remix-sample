@@ -43,3 +43,17 @@ $ npm start
 ```
 
 * Access to `http://localhost:3000`
+
+## Lint
+
+* Lint
+
+```
+$ npm run lint
+```
+
+* Lint and fix codes
+
+```
+$ npm run lint:fix
+```
