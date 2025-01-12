@@ -17,3 +17,5 @@ $ npm run build
 ```
 $ npm start
 ```
+
+* Access to `http://localhost:3000`
