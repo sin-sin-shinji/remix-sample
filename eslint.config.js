@@ -5,6 +5,7 @@ import pluginReact from 'eslint-plugin-react';
 import pluginReactHooks from 'eslint-plugin-react-hooks';
 import pluginJsxA11y from 'eslint-plugin-jsx-a11y';
 import pluginImport from 'eslint-plugin-import';
+import configPrettier from 'eslint-config-prettier';
 import { fixupPluginRules } from '@eslint/compat';
 
 /** @type {import('eslint').Linter.Config[]} */
@@ -42,10 +43,12 @@ export default [
       ],
     },
   },
+  configPrettier,
   {
     rules: {
       'import/order': ['error'],
-      '@typescript-eslint/no-unused-vars': 'warn',
+      quotes: ['error', 'single'],
+      semi: ['error', 'always'],
     },
   },
 ];
