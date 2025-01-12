@@ -1,9 +1,10 @@
 {
   "name": "remix-sample",
   "version": "1.0.0",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "remix vite:build",
+    "start": "remix-serve build/server/index.js"
   },
   "keywords": [],
   "author": "",
