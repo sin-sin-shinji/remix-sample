@@ -43,6 +43,15 @@ export default function LoginPage() {
             <CardTitle>ログイン</CardTitle>
           </CardHeader>
           <CardContent>
+            <div className="mb-4">
+              {form.errors && (
+                <div>
+                  {form.errors.map((error) => (
+                    <FormMessage key={error}>{error}</FormMessage>
+                  ))}
+                </div>
+              )}
+            </div>
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="email">メールアドレス</Label>
@@ -86,17 +95,29 @@ export async function action({ request }: ActionFunctionArgs) {
   const submission = parseWithZod(formData, { schema });
 
   if (submission.status !== 'success') {
-    return Response.json(submission.reply());
+    return submission.reply();
   }
 
-  const user = await authenticator.authenticate('user-pass', request);
+  try {
+    const user = await authenticator.authenticate('user-pass', request);
 
-  const session = await sessionStorage.getSession(
-    request.headers.get('cookie')
-  );
-  session.set('user', user);
+    const session = await sessionStorage.getSession(
+      request.headers.get('cookie')
+    );
+    session.set('user', user);
 
-  throw redirect('/', {
-    headers: { 'Set-Cookie': await sessionStorage.commitSession(session) },
-  });
+    throw redirect('/', {
+      headers: { 'Set-Cookie': await sessionStorage.commitSession(session) },
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      // ログイン認証処理に失敗した場合は、エラーを追記して返す
+      return submission.reply({
+        formErrors: ['メールアドレス、またはパスワードが違います'],
+      });
+    }
+
+    // 上記以外の意図しないエラーの場合は、再送出する
+    throw error;
+  }
 }
