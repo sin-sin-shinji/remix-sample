@@ -61,6 +61,7 @@ export default function LoginPage() {
                   name={fields.email.name}
                   type="email"
                   placeholder="メールアドレスを入力してください"
+                  aria-invalid={!!fields.email.errors}
                 />
                 {fields.email.errors && (
                   <FormMessage>{fields.email.errors}</FormMessage>
@@ -74,6 +75,7 @@ export default function LoginPage() {
                   name={fields.password.name}
                   type="password"
                   placeholder="パスワードを入力してください"
+                  aria-invalid={!!fields.password.errors}
                 />
                 {fields.password.errors && (
                   <FormMessage>{fields.password.errors}</FormMessage>
