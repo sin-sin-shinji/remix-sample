@@ -1,5 +1,8 @@
-import { Form } from '@remix-run/react';
+import { Form, useActionData } from '@remix-run/react';
 import { ActionFunctionArgs, redirect } from '@remix-run/node';
+import { useForm } from '@conform-to/react';
+import { parseWithZod } from '@conform-to/zod';
+import { z } from 'zod';
 import { authenticator } from '~/services/auth.server';
 import { Button } from '~/components/ui/button';
 import {
@@ -12,11 +15,29 @@ import {
 import { Input } from '~/components/ui/input';
 import { Label } from '~/components/ui/label';
 import { sessionStorage } from '~/services/session.server';
+import { FormMessage } from '~/components/molecules/Form';
+
+const schema = z.object({
+  email: z
+    .string({ message: 'メールアドレスを入力してください' })
+    .email({ message: 'メールアドレスの形式で入力してください' }),
+  password: z.string({ message: 'パスワードを入力してください' }),
+});
 
 export default function LoginPage() {
+  const lastResult = useActionData<typeof action>();
+  const [form, fields] = useForm({
+    lastResult,
+    onValidate({ formData }) {
+      return parseWithZod(formData, { schema });
+    },
+    shouldValidate: 'onBlur',
+    shouldRevalidate: 'onInput',
+  });
+
   return (
     <div className="mx-auto w-[350px] mt-40">
-      <Form action="/login" method="post">
+      <Form action="/login" method="post" id={form.id} onSubmit={form.onSubmit}>
         <Card className="w-[350px]">
           <CardHeader>
             <CardTitle>ログイン</CardTitle>
@@ -27,19 +48,27 @@ export default function LoginPage() {
                 <Label htmlFor="email">メールアドレス</Label>
                 <Input
                   id="email"
-                  name="email"
+                  key={fields.email.key}
+                  name={fields.email.name}
                   type="email"
                   placeholder="メールアドレスを入力してください"
                 />
+                {fields.email.errors && (
+                  <FormMessage>{fields.email.errors}</FormMessage>
+                )}
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="password">パスワード</Label>
                 <Input
                   id="password"
-                  name="password"
+                  key={fields.password.key}
+                  name={fields.password.name}
                   type="password"
                   placeholder="パスワードを入力してください"
                 />
+                {fields.password.errors && (
+                  <FormMessage>{fields.password.errors}</FormMessage>
+                )}
               </div>
             </div>
           </CardContent>
@@ -53,6 +82,13 @@ export default function LoginPage() {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.clone().formData();
+  const submission = parseWithZod(formData, { schema });
+
+  if (submission.status !== 'success') {
+    return Response.json(submission.reply());
+  }
+
   const user = await authenticator.authenticate('user-pass', request);
 
   const session = await sessionStorage.getSession(
