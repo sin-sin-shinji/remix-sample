@@ -16,7 +16,7 @@ authenticator.use(
     // TODO: ここで対象のUser情報をDBから取得する処理を追加する
     const user: User = {
       id: 1,
-      email: 'emailtest',
+      email: email.toString(),
       displayName: 'Test User1',
     };
     return user;
