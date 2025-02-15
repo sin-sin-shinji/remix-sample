@@ -1,6 +1,6 @@
 import { Links, Meta, Outlet, Scripts, LiveReload } from '@remix-run/react';
 import { LinksFunction } from '@remix-run/node';
-import tailwindStyle from './styles/tailwind.css';
+import tailwindStyle from './styles/tailwind.css?url';
 
 export const links: LinksFunction = () => [
   // Memo: 型が`module "*.css"`となり型エラーとなるため、 解決のため`string`へキャスト
