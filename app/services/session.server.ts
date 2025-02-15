@@ -1,6 +1,6 @@
 import { createCookieSessionStorage } from '@remix-run/node';
 
-const sessionSecret: string | undefined = process.env.SESSIONN_SECRET;
+const sessionSecret: string | undefined = process.env.SESSION_SECRET;
 if (sessionSecret === undefined) {
   throw new Error('`SESSION_SECRET` is required.');
 }
