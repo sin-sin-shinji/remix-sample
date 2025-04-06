@@ -8,7 +8,6 @@ import argon2 from 'argon2';
 export const hashPassword = async (
   plainTextPassword: string
 ): Promise<string> => {
-  // デフォルトのパラメータでハッシュ化。必要に応じてオプションを指定できます。
   return await argon2.hash(plainTextPassword);
 };
 
