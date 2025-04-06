@@ -1,5 +1,7 @@
 import { Authenticator } from 'remix-auth';
 import { FormStrategy } from 'remix-auth-form';
+import { prisma } from '~/infrastructures/db.server';
+import { verifyPassword } from '~/lib/password.server';
 import { User } from '~/models/user';
 
 export const authenticator = new Authenticator<User>();
@@ -13,13 +15,21 @@ authenticator.use(
       throw Error('Both `email` and `password` must be present.');
     }
 
-    // TODO: ここで対象のUser情報をDBから取得する処理を追加する
-    const user: User = {
-      id: 1,
-      email: email.toString(),
-      displayName: 'Test User1',
-    };
-    return user;
+    const user = await prisma.user.findUnique({
+      where: { email: email.toString() },
+    });
+
+    if (!user) {
+      throw new Error('Error');
+    }
+
+    // パスワード検証。ハッシュと比較して検証する。
+    const isValid = await verifyPassword(user.password, password.toString());
+    if (!isValid) {
+      throw new Error('Error');
+    }
+
+    return { id: user.id, email: user.email };
   }),
   'user-pass'
 );
