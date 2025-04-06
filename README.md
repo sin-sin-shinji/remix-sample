@@ -76,5 +76,5 @@ $ npm run lint:fix
 * Generate migration file
 
 ```
-$ npx prisma migrate dev --name init
+$ npx prisma migrate dev --name "<CREATE_TEST_TABLE>"
 ```
