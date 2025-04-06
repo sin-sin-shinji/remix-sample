@@ -22,6 +22,12 @@ $ docker-compose build
 $ docker-compose run --rm app npm install
 ```
 
+* DB Migration
+
+```
+$ docker-compose run --rm app npx prisma generate
+```
+
 * Start
 
 ```
@@ -37,10 +43,10 @@ $ docker-compose up -d
 $ npm install
 ```
 
-* Build
+* DB Migration
 
 ```
-$ npm run build
+$ npx prisma generate
 ```
 
 * Start
@@ -63,4 +69,12 @@ $ npm run lint
 
 ```
 $ npm run lint:fix
+```
+
+## Database
+
+* Generate migration file
+
+```
+$ npx prisma migrate dev --name init
 ```
