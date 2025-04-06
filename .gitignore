@@ -184,4 +184,10 @@ node_modules
 /build
 /public/build
 
+# other
+tmp
+
+# sqlite
+prisma/db
+
 # End of https://www.toptal.com/developers/gitignore/api/macos,direnv,node,remix
