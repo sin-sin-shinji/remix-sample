@@ -184,4 +184,7 @@ node_modules
 /build
 /public/build
 
+# other
+tmp
+
 # End of https://www.toptal.com/developers/gitignore/api/macos,direnv,node,remix
